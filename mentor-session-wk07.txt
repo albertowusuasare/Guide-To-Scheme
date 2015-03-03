@@ -1,0 +1,134 @@
+/*
+ Author: Albert Owusu-Asare <owusuasa@grinnell.edu>
+ Date:   Mon Mar  2 16:22:44 CST 2015
+*/
+
+
+==========
+Objective:
+==========
+*  What is the significance of recursion -> motivation, why is it so important?
+*  Recursion vs Iteration? -> Compare some of the ways we've done repetition. Is recursion any better? 
+   (not sure if I will talk about this)
+*  Examples of recursion : walk through some typical basic recursive functions, tie in magic of recursion.
+   i) Factorial? -> Hello World of recursion why not?
+   ii) Recursive function to carve out a set using some property. -> get all the multiples of 2 maybe?
+   iii) Recursive function that applies something to each element of a lst -> recursive times10 maybe?
+   iv) If more time write their own version of iota recursively
+
+==========
+DETAILS
+==========
+
+* What is the significance of recursion -> motivation, why is it so important?
+--------------------------------------------------------------------------------
+-> Recursion is beautiful because it allows us to take advantage of the fact that we can break problems into 
+simpler sub-problems and tackle each of those simpler ones seperately.
+
+-> Also we get to tackle simpler subproblems by using the recursive fairy.
+
+-> Recursion will aslo be greatly appreciated by those who deem mathematical induction as beautiful since recursion and 
+induction are inutitively similar. Computer Scientist may tend to think about recursion as induction except we are "knocking 
+down" backwards instead of forwards.
+
+
+
+Parts of a recursive algorithm
+-------------------------------
+-> Base case is the condition under which there is no recursive call. A simple problem you can solve in one pass.
+-> Recursive case : the condition that leads to the recursive call and the operations we do to the result of that call.
+
+
+Examples
+---------
+i) Factorial 
+
+For a natural number n, “n-factorial” (written n!) is defined informally to be the product of all the natural numbers from 
+1 to n, inclusive: n! = 1 · 2 · 3 … · n .
+
+Notice that n! = n * (n-1)!
+
+For the base case: We ask ourselves "What is the simplest factorial problem I can solve without any recursive step involved?
+The answer is 1! = 1;
+
+Hence our base case looks like :
+
+ if( our value is one )
+     return one
+
+Our recursive step looks like :
+
+  (if our value is anything but one)
+    return n * (factorial (- n 1))
+
+Remeber this means that if the recursion fairy magically gives us (factorial (- n 1)) all we need to do to get the result for n!
+is to multiply the value that the fariy hands us by 'n'
+
+Altogether we have
+; Precondtion : n , is an integer > 0
+
+(define factorial
+  (lambda (val)
+     (if (= val 1)
+           1
+         ( * val  (factorial (- val 1))))))
+
+ii) Recursively carve out from a list all the elements that are multiples 
+
+;Precondition: lst, is a valid list of numbers
+;Postcondition, Returns a  list of the results
+
+Try to figure out on their own :
+
+(define multiple-of-2?
+   (lambda (x) 
+    (= (modulo x 2) 0)))
+
+   (define carve-2s
+      (lambda (lst)
+         (cond[(empty? lst)  '()]
+	     [ ( multiple-of-2? (car lst)) (cons (car lst) (carve-2s (cdr lst)))]
+             [ else (carve-2s (cdr lst))])))
+  
+iii) Recursively multiply every element in a list by 10
+
+; Try to write a version with Map first and then write recursive one. (Try before you move on)
+ (map (lambda (x) (* 10 x)) '(1 2 3 4 5))
+
+-> Now write recursive version
+;Precondtion lst, must be a valid lst
+;Postcondition returns a list of the results
+
+
+(define times10
+  (lambda (lst)
+    (if (empty? lst)
+        '()
+        (cons (* 10 (car lst)) (times10 (cdr lst))))))
+
+=============================================
+EXTRA (you dont necessarly need to read this)
+=============================================
+Beware of typos:
+
+A program that is running is maintained in memory in the funciton call stack. The function 
+call stack keep track of all the active procedures (procedures that are currently running). The call stack
+specifically keeps track for a particular procedure all the current variables, the parameters, return types.
+
+When you call a function recursively, you are basically creating a new entry in this function stack. 
+That entry will also store values pertaining to the call. However when the new function is done executing,
+it tells the function that called initially  the results  "this" particular call  obtained.
+
+As a result, the deeper we go into the recursion the more and more of these functions we have in the function
+stack. Eventually, we deal with (execute) all the recursive calls and we keep returning( unroling the calls) till we 
+get to the very first call and return a final answer.
+
+
+Also for those wondering, recursive algorithms  are  not necessarily faster or more efficient in all cases than iterative 
+ones. What we can tell for sure is that in some cases a recursive solution may look nicer(cleaner) than the corresponding 
+iterative ones.
+
+Sources:
+=========
+http://pages.cs.wisc.edu/~vernon/cs367/notes/6.RECURSION.html
+http://cse.proj.ac.il/recursion/Induction_Recursion.htm
