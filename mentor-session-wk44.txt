@@ -1,0 +1,13 @@
+/********************************************
+
+Author       : Albert Owusu-Asare
+Date Created : Thu Apr 16 08:09:54 CDT 2015
+
+Week 44 mentor session notes
+
+**********************************************/
+
+
+1. Topics Association Lists 
+2. Introduction to sorting
+3. Analyzing Procedures
